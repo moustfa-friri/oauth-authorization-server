@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <Property name="LOG_PATTERN">%d{DEFAULT} %-5level [%t]  ${APP_NAME},%X{traceId},%X{spanId}  %c{1} - %msg%n%throwable</Property>
+        <Property name="APP_LOG_ROOT">logs/${spring:spring.application.name}</Property>
+        <Property name="APP_NAME">${spring:spring.application.name}</Property>
+
+     </Properties>
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT">
+            <PatternLayout
+                    pattern="${LOG_PATTERN}"/>
+        </Console>
+
+        <RollingFile name="RollingFile"
+                     fileName="${APP_LOG_ROOT}/logs.log"
+                     filePattern="${APP_LOG_ROOT}/${APP_NAME}/logs-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${LOG_PATTERN}" />
+            <Policies>
+                <SizeBasedTriggeringPolicy size="20 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="100" />
+        </RollingFile>
+
+        <File name="JSONLogfileAppender" fileName="${APP_LOG_ROOT}/logfile.json">
+
+            <JsonTemplateLayout eventTemplateUri="classpath:EcsLayout.json">
+                <!-- Custom key value pair -->
+                <EventTemplateAdditionalField key="host" value="hostname"/>
+                <EventTemplateAdditionalField key="serviceName" value="${APP_NAME}"/>
+            </JsonTemplateLayout>
+
+            <!--    <BurstFilter level="WARNING" rate="2" maxBurst="10"/> -->
+        </File>
+        <Async name="AsyncAppender" bufferSize="1">
+            <AppenderRef ref="JSONLogfileAppender"/>
+        </Async>
+     </Appenders>
+
+
+    <Loggers>
+        <Root level="INFO">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="RollingFile"/>
+            <AppenderRef ref="AsyncAppender" />
+
+        </Root>
+
+
+     </Loggers>
+
+
+ </Configuration>

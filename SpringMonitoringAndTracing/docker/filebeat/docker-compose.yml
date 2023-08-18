@@ -1,0 +1,7 @@
+docker run -d \
+--name=filebeat \
+--user=root \
+--volume="$(pwd)/filebeat.yml:/usr/share/filebeat/filebeat.yml:ro" \
+--volume="/Users/elmustafafriri/work/demos/SpringMonitoringAndTracing/logs:/usr/share/filebeat/mylog" \
+--volume="/var/run/docker.sock:/var/run/docker.sock" \
+docker.elastic.co/beats/filebeat:8.7.1 filebeat -e --strict.perms=false

@@ -1,0 +1,18 @@
+server:
+  port: 0
+  servlet:
+    context-path: /service-A
+spring:
+  application:
+    name: service-A
+  zipkin:
+    baseUrl: http://localhost:9411/
+  cloud:
+    compatibility-verifier:
+      enabled: true
+  log:
+    level: debug
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}

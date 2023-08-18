@@ -1,0 +1,11 @@
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /usr/share/filebeat/mylog/*/*.json
+#output.console:
+#  pretty: true
+#  enabled: true
+output.logstash:
+  enabled: true
+  hosts: ["localserver:5044"]
